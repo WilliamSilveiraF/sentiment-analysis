@@ -6,13 +6,10 @@ tokenizer = AutoTokenizer.from_pretrained('cardiffnlp/twitter-roberta-base-senti
 model = AutoModelForSequenceClassification.from_pretrained('cardiffnlp/twitter-roberta-base-sentiment')
 
 def sentiment_score(text: str) -> int:
-    #['Negative', 'Neutral', 'Positive']
     encoded_text = tokenizer(text, return_tensors='pt')
     output = model(**encoded_text)
 
     scores = output[0][0].detach().numpy()
     scores = softmax(scores)
 
-    return scores
-
-
+    return { 'negative': scores[0], 'neutral': scores[1], 'positive': scores[2] }
