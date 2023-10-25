@@ -49,3 +49,13 @@ async def upload_audio(
         print(e)
         raise HTTPException(status_code=500, detail="File upload failed.")
 
+@router.get("/audio/{audio_id}")
+def get_audio_by_id(
+    audio_id: int,
+    db: Session = Depends(get_db)
+):
+    audio_analysis = db.query(AudioAnalysis).filter(AudioAnalysis.id == audio_id).first()
+    if audio_analysis:
+        return audio_analysis
+    else:
+        raise HTTPException(status_code=404, detail="Audio not found.")
