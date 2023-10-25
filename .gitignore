@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+#audios
+uploaded_audio/
+
 # Distribution / packaging
 .Python
 build/
@@ -144,3 +147,6 @@ venv.bak/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+#gcp
+gcp.json

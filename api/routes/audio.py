@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
-from fastapi.responses import JSONResponse
-import shutil
 from pathlib import Path
+from api.services.transcribe_audio import transcribe_model_selection
+
 import os
 
 router = APIRouter()
@@ -15,12 +15,18 @@ def read_root():
 @router.post("/upload/")
 async def upload_audio(file: UploadFile = File(...)):
     try:
-        Path(AUDIO_PATH).mkdir(parents=True, exist_ok=True)
+        data = await file.read()
 
-        with open(os.path(AUDIO_PATH, file.filename), "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-            
+        Path(AUDIO_PATH).mkdir(parents=True, exist_ok=True)
+        path_to_audio = os.path.join(AUDIO_PATH, file.filename)
+
+        with open(path_to_audio, 'wb') as f:
+            f.write(data)
+
+        audio_text = transcribe_model_selection(path_to_audio)
+
         return {"filename": file.filename, "message": "File uploaded successfully!"}
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail="File upload failed.")
 

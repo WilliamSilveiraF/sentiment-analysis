@@ -1,22 +1,26 @@
 from google.cloud import speech
-from google.cloud.speech import enums, types
 
-def transcribe_audio(file_path):
+def transcribe_model_selection(speech_file: str) -> speech.RecognizeResponse:
+
     client = speech.SpeechClient()
 
-    with open(file_path, "rb") as audio_file:
+    with open(speech_file, "rb") as audio_file:
         content = audio_file.read()
 
-    audio = types.RecognitionAudio(content=content)
-    config = types.RecognitionConfig(
-        encoding=enums.RecognitionConfig.AudioEncondig.LINEAR16,
-        # TODO: Adjuste sample rate
+    audio = speech.RecognitionAudio(content=content)
+
+    config = speech.RecognitionConfig(
+        encoding=speech.RecognitionConfig.AudioEncoding.ENCODING_UNSPECIFIED,
         sample_rate_hertz=16000,
-        language_code="en-US"
+        language_code="en-US",
     )
 
     response = client.recognize(config=config, audio=audio)
+    
+    for i, result in enumerate(response.results):
+        alternative = result.alternatives[0]
+        print("-" * 20)
+        print(f"First alternative of result {i}")
+        print(f"Transcript: {alternative.transcript}")
 
-    if response.results:
-        return response.results[0].alternatives[0].transcript
-    return ""
+    return response
