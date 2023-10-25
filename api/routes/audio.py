@@ -1,7 +1,9 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
 from pathlib import Path
-from services.transcribe_audio import transcribe_audio_content
-
+from services import summary, sentiment_calculator, transcribe_audio
+from models.audio_analysis import AudioAnalysis
+from sqlalchemy.orm import Session
+from db.utils import get_db
 import os
 
 router = APIRouter()
@@ -13,7 +15,10 @@ def read_root():
     return {"Audio":"OK"}
 
 @router.post("/upload/")
-async def upload_audio(file: UploadFile = File(...)):
+async def upload_audio(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
     try:
         data = await file.read()
 
@@ -23,9 +28,23 @@ async def upload_audio(file: UploadFile = File(...)):
         with open(path_to_audio, 'wb') as f:
             f.write(data)
 
-        audio_text = transcribe_audio_content(path_to_audio)
+        transcription = transcribe_audio.transcribe_audio_content(path_to_audio)
+        summary_text = summary.generate_summary(transcription)
+        sentiment_scores = sentiment_calculator.sentiment_score(transcription)
 
-        return {"filename": file.filename, "message": "File uploaded successfully!"}
+        audio_analysis = AudioAnalysis(
+            filename=file.filename,
+            summary=summary_text,
+            transcription=transcription,
+            negative_score=sentiment_scores['negative_score'],
+            neutral_score=sentiment_scores['neutral_score'],
+            positive_score=sentiment_scores['positive_score']
+        )
+
+        db.add(audio_analysis)
+        db.commit()
+        
+        return {"audio_id": audio_analysis.id, "message": "File uploaded successfully!"}
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail="File upload failed.")

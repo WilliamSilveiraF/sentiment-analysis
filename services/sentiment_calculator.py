@@ -12,4 +12,8 @@ def sentiment_score(text: str) -> int:
     scores = output[0][0].detach().numpy()
     scores = softmax(scores)
 
-    return { 'negative': scores[0], 'neutral': scores[1], 'positive': scores[2] }
+    return { 
+        'negative_score': float(scores[0]), 
+        'neutral_score': float(scores[1]), 
+        'positive_score': float(scores[2])
+    }
