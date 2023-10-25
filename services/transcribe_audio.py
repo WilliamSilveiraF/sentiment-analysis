@@ -1,6 +1,6 @@
 from google.cloud import speech
 
-def transcribe_model_selection(speech_file: str) -> speech.RecognizeResponse:
+def transcribe_audio_content(speech_file: str) -> speech.RecognizeResponse:
 
     client = speech.SpeechClient()
 
@@ -9,7 +9,7 @@ def transcribe_model_selection(speech_file: str) -> speech.RecognizeResponse:
 
     audio = speech.RecognitionAudio(content=content)
 
-    config = speech.RecognitionConfig(
+    config = speech.RecognitionConfig( # TODO SUPPORT DIFFERENT TYPES OF AUDIO
         encoding=speech.RecognitionConfig.AudioEncoding.ENCODING_UNSPECIFIED,
         sample_rate_hertz=16000,
         language_code="en-US",
@@ -19,8 +19,5 @@ def transcribe_model_selection(speech_file: str) -> speech.RecognizeResponse:
     
     for i, result in enumerate(response.results):
         alternative = result.alternatives[0]
-        print("-" * 20)
-        print(f"First alternative of result {i}")
-        print(f"Transcript: {alternative.transcript}")
-
-    return response
+        
+        return alternative.transcript

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from api.routes import audio
-from api.middlewares import cors_middleware
+from middlewares import cors_middleware
 
 app = FastAPI()
 

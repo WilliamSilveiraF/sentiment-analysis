@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from pathlib import Path
-from api.services.transcribe_audio import transcribe_model_selection
+from services.transcribe_audio import transcribe_audio_content
 
 import os
 
@@ -23,7 +23,7 @@ async def upload_audio(file: UploadFile = File(...)):
         with open(path_to_audio, 'wb') as f:
             f.write(data)
 
-        audio_text = transcribe_model_selection(path_to_audio)
+        audio_text = transcribe_audio_content(path_to_audio)
 
         return {"filename": file.filename, "message": "File uploaded successfully!"}
     except Exception as e:
