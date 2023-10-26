@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    image: audio-sentiment-analysis:latest
+    ports:
+      - "8000:80"
+    environment:
+      - DATABASE_URL=mysql+mysqlconnector://william:Al12N%23assr@localhost/sentimentAnalysis
+    depends_on:
+      - db
+
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=@As12345678
+      - MYSQL_DATABASE=sentimentAnalysis
+      - MYSQL_USER=william
+      - MYSQL_PASSWORD=Al12N#assr
