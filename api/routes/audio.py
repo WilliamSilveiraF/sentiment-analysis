@@ -10,10 +10,6 @@ router = APIRouter()
 
 AUDIO_PATH = "uploaded_audio/"
 
-@router.get("/")
-def read_root():
-    return {"Audio":"OK"}
-
 @router.post("/upload/")
 async def upload_audio(
     file: UploadFile = File(...),
@@ -28,7 +24,7 @@ async def upload_audio(
         with open(path_to_audio, 'wb') as f:
             f.write(data)
 
-        transcription = transcribe_audio.transcribe_audio_content(path_to_audio)
+        transcription = transcribe_audio.transcribe_audio_content(path_to_audio, 'latest_short')
         summary_text = summary.generate_summary(transcription)
         sentiment_scores = sentiment_calculator.sentiment_score(transcription)
 
