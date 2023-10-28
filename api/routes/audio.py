@@ -3,7 +3,7 @@ from pathlib import Path
 from services import summary, sentiment_calculator, transcribe_audio
 from models.audio_analysis import AudioAnalysis
 from sqlalchemy.orm import Session
-from db.utils import get_db
+from db.services import get_db
 import os
 
 router = APIRouter()

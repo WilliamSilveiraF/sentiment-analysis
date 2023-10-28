@@ -1,11 +1,10 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from config import DATABASE_URL
+import sqlalchemy as _sql
+import sqlalchemy.ext.declarative as _declarative
+import sqlalchemy.orm as _orm
+import config
 
+engine = _sql.create_engine(config.DATABASE_URL)
 
-engine = create_engine(DATABASE_URL)
+SessionLocal = _orm.sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
+Base = _declarative.declarative_base()
