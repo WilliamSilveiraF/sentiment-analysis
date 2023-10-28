@@ -8,7 +8,7 @@ import os
 
 router = APIRouter()
 
-AUDIO_PATH = "uploaded_audio/"
+AUDIO_PATH = "/app/uploaded_audio/"
 
 @router.post("/upload/")
 async def upload_audio(

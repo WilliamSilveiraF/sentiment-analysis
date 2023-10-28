@@ -1,20 +1,38 @@
-version: '3.8'
+version: '3.1'
 
 services:
   web:
     build: .
-    image: audio-sentiment-analysis:latest
     ports:
-      - "8000:80"
-    environment:
-      - DATABASE_URL=mysql+mysqlconnector://william:Al12N%23assr@sentimentAnalysis-mysql/sentimentAnalysis
+      - "8080:80"
     depends_on:
       - db
-
-  db:
-    image: mysql:latest
+    networks:
+      - mynet
+    volumes:
+      - uploaded_audio:/app/uploaded_audio
+      - ./gcp.json:/app/gcp.json
     environment:
-      - MYSQL_ROOT_PASSWORD=Al12N%23assr
-      - MYSQL_DATABASE=sentimentAnalysis
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=Al12N%23assr
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/gcp.json
+  db:
+    image: postgres:16
+    container_name: sentimentanalysis-db
+    environment:
+      POSTGRES_DB: sentimentanalysis_db
+      POSTGRES_USER: william
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mynet
+    restart: always
+
+networks:
+  mynet:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  uploaded_audio:
