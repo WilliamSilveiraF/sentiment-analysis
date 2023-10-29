@@ -16,17 +16,16 @@ This is a sentiment analysis API developed with FastAPI
 Create a file named `.env` in the project root directory and add your configurations, following the example below:
 
 ```env
-POSTGRES_DB=sentimentanalysis_db
-POSTGRES_USER=username
-POSTGRES_PASSWORD=password
-HOST=localhost | db | IP
-DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${HOST}:5432/${POSTGRES_DB}
-GCP_CREDENTIALS_FILE=gcp.json
+DATABASE_URL=postgresql://william:password@db:5432/sentimentanalysis_db
 ```
 
 Google Cloud Credentials
 
-To authenticate with the Google Cloud Platform, you'll need to create a service account, download the JSON key file, and set the GCP_CREDENTIALS_FILE environment variable in your .env file to point to this key file.
+```python
+export GOOGLE_APPLICATION_CREDENTIALS="gcp.json"
+```
+
+To authenticate with the Google Cloud Platform, you'll need to create a service account and download the JSON key file. Futhermore, rename as gcp.json and put in the base of project /.
 
 
 ```json
