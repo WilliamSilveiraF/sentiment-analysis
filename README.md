@@ -64,4 +64,6 @@ The server is up and running at http://localhost:8080/
 
 #### Flow Diagram
 
+The user invokes the endpoint with an audio file. Subsequently, the Speech-To-Text API from Google Cloud Platform transcribes the content. With the generated text, we will run summarization and sentiment analysis models, and store the resulting data in database for retrieval at a later time.
+
 ![all text](https://github.com/WilliamSilveiraF/sentiment-analysis/blob/main/Diagram.png)
