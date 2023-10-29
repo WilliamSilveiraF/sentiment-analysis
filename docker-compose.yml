@@ -11,16 +11,16 @@ services:
       - mynet
     volumes:
       - uploaded_audio:/app/uploaded_audio
-      - ./gcp.json:/app/gcp.json
+      - ./${GCP_CREDENTIALS_FILE}:/app/${GCP_CREDENTIALS_FILE}
     environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/gcp.json
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/${GCP_CREDENTIALS_FILE}
   db:
     image: postgres:16
     container_name: sentimentanalysis-db
     environment:
-      POSTGRES_DB: sentimentanalysis_db
-      POSTGRES_USER: william
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from api.routes import audio # FIXME LOAD MODEL BEFORE INITIALIZATION
+from api.routes import audio
 from middlewares import cors_middleware
 import db
 
